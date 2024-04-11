@@ -16,26 +16,10 @@ export async function doFetch(aim, textToWait) {
     per_page: 9,
   });
 
-  textToWait.style.borderColor = 'black';
-  textToWait.style.borderBottomColor = 'transparent';
-
-  return fetch(`${url}?${params}`)
-    .then(response => {
-      if (!response.ok) {
-        throw new Error(response.status);
-      }
-      return response.json();
-    })
-
-    .catch(error => {
-      iziToast.show({
-        title: 'Ops.',
-        titleColor: 'white',
-        message: error,
-        messageColor: 'white',
-        color: 'red',
-        position: 'topCenter',
-        timeout: '5000',
-      });
-    });
+  return fetch(`${url}?${params}`).then(response => {
+    if (!response.ok) {
+      throw new Error(response.status);
+    }
+    return response.json();
+  });
 }

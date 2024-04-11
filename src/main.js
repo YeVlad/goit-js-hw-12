@@ -26,8 +26,10 @@ form.addEventListener('submit', handleSearch);
 async function handleSearch(event) {
   event.preventDefault();
   photoGallery.innerHTML = '';
+  loader.style.borderColor = 'black';
+  loader.style.borderBottomColor = 'transparent';
   const searchWord = event.currentTarget.elements.inputSearch.value;
-  await doFetch(searchWord, loader, photoGallery)
+  doFetch(searchWord, loader, photoGallery)
     .then(data => {
       if (data.total == 0) {
         iziToast.show({
@@ -40,14 +42,25 @@ async function handleSearch(event) {
           position: 'topCenter',
           timeout: '5000',
         });
-
-        throw new Error(data.status);
+        return 0;
+      } else {
+        photoGallery.insertAdjacentHTML('beforeend', makeGallery(data));
+        book.refresh();
+        event.currentTarget.elements.inputSearch.value = '';
       }
-      return makeGallery(data);
     })
-    .then(newGallery => {
-      photoGallery.insertAdjacentHTML('beforeend', newGallery);
-      book.refresh();
+    .catch(error => {
+      if (error.length != undefined) {
+        iziToast.show({
+          title: 'Ops.',
+          titleColor: 'white',
+          message: error,
+          messageColor: 'white',
+          color: 'red',
+          position: 'topCenter',
+          timeout: '5000',
+        });
+      }
     })
     .finally(() => {
       loader.style.borderColor = 'white';
