@@ -50,17 +50,17 @@ async function handleSearch(event) {
       }
     })
     .catch(error => {
-      if (error.length != undefined) {
-        iziToast.show({
-          title: 'Ops.',
-          titleColor: 'white',
-          message: error,
-          messageColor: 'white',
-          color: 'red',
-          position: 'topCenter',
-          timeout: '5000',
-        });
-      }
+      // if (error.length != undefined) {
+      iziToast.show({
+        title: 'Ops.',
+        titleColor: 'white',
+        message: error,
+        messageColor: 'white',
+        color: 'red',
+        position: 'topCenter',
+        timeout: '5000',
+      });
+      // }
     })
     .finally(() => {
       loader.style.borderColor = 'white';
