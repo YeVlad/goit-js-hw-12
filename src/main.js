@@ -46,7 +46,7 @@ async function handleSearch(event) {
       } else {
         photoGallery.insertAdjacentHTML('beforeend', makeGallery(data));
         book.refresh();
-        event.currentTarget.elements.inputSearch.value = '';
+        event.target.reset();
       }
     })
     .catch(error => {
