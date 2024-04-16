@@ -1,25 +1,20 @@
-// Описаний у документації
-import iziToast from 'izitoast';
-// Додатковий імпорт стилів
-import 'izitoast/dist/css/iziToast.min.css';
+import axios from 'axios';
 
-export async function doFetch(aim, textToWait) {
+export async function doFetch(aim, page) {
   const API_KEY = '16991331-df0a6792d36af314f174a3b15';
   const url = 'https://pixabay.com/api/';
 
-  const params = new URLSearchParams({
-    key: API_KEY,
-    q: aim,
-    image_type: 'photo',
-    orientation: 'horizontal',
-    safesearch: true,
-    per_page: 9,
+  const response = await axios({
+    url,
+    params: {
+      key: API_KEY,
+      q: aim,
+      image_type: 'photo',
+      orientation: 'horizontal',
+      safesearch: true,
+      per_page: 15,
+      page,
+    },
   });
-
-  return fetch(`${url}?${params}`).then(response => {
-    if (!response.ok) {
-      throw new Error(response.status);
-    }
-    return response.json();
-  });
+  return response;
 }

@@ -16,10 +16,13 @@ img {
 
   color: #242424;
   background-color: rgba(255, 255, 255, 0.87);
+  position: relative;
 }
 
 .work-area {
   margin: 10px 20px;
+  display: flex;
+  flex-direction: column;
 }
 
 .form-search {
@@ -27,6 +30,7 @@ img {
   justify-content: center;
   align-items: center;
   gap: 8px;
+  margin-bottom: 20px;
 }
 
 input {
@@ -43,7 +47,6 @@ button {
   border: 0;
   padding: 8px 16px;
   width: 91px;
-  height: 40px;
 
   background: #4e75ff;
 
@@ -51,6 +54,10 @@ button {
   color: #fff;
 
   cursor: pointer;
+}
+
+.buttonMore {
+  margin: 0 auto;
 }
 
 button:hover {
@@ -69,6 +76,8 @@ button:hover {
   justify-content: center;
   align-items: center;
   gap: 24px;
+
+  margin-bottom: 20px;
 }
 
 .card {

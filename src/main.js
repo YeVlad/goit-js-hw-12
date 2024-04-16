@@ -16,20 +16,30 @@ loader.style.borderColor = 'white';
 loader.style.borderBottomColor = 'transparent';
 const photoGallery = document.querySelector('.images-place');
 
+const buttonMore = document.querySelector('.buttonMore');
+
 const book = new SimpleLightbox('.card .place-for-image a', {
   captionsData: 'alt',
   captionDelay: 250,
 });
 
 form.addEventListener('submit', handleSearch);
+buttonMore.addEventListener('click', searchMore);
+
+let page = 1;
+const pageLimit = 34;
+let searchWord;
 
 async function handleSearch(event) {
   event.preventDefault();
+  buttonMore.hidden = true;
   photoGallery.innerHTML = '';
   loader.style.borderColor = 'black';
   loader.style.borderBottomColor = 'transparent';
-  const searchWord = event.currentTarget.elements.inputSearch.value;
-  doFetch(searchWord, loader, photoGallery)
+  searchWord = event.currentTarget.elements.inputSearch.value;
+  page = 1;
+
+  doFetch(searchWord, page)
     .then(data => {
       if (data.total == 0) {
         iziToast.show({
@@ -42,15 +52,27 @@ async function handleSearch(event) {
           position: 'topCenter',
           timeout: '5000',
         });
-        return 0;
+        return;
       } else {
-        photoGallery.insertAdjacentHTML('beforeend', makeGallery(data));
+        buttonMore.hidden = false;
+        photoGallery.insertAdjacentHTML('beforeend', makeGallery(data.data));
         book.refresh();
         event.target.reset();
+        page = page + 1;
+        if (page == data.data.totalHits) {
+          iziToast.show({
+            titleColor: 'white',
+            message: `We're sorry, but you've reached the end of search results.!`,
+            messageColor: 'white',
+            color: 'blue',
+            position: 'topCenter',
+            timeout: '5000',
+          });
+          buttonMore.hidden = true;
+        }
       }
     })
     .catch(error => {
-      // if (error.length != undefined) {
       iziToast.show({
         title: 'Ops.',
         titleColor: 'white',
@@ -60,7 +82,62 @@ async function handleSearch(event) {
         position: 'topCenter',
         timeout: '5000',
       });
-      // }
+    })
+    .finally(() => {
+      loader.style.borderColor = 'white';
+      loader.style.borderBottomColor = 'transparent';
+    });
+}
+
+async function searchMore(event) {
+  buttonMore.hidden = true;
+  loader.style.borderColor = 'black';
+  loader.style.borderBottomColor = 'transparent';
+
+  doFetch(searchWord, page)
+    .then(data => {
+      console.log(data.data);
+
+      if (data.total == 0) {
+        iziToast.show({
+          title: 'Ops.',
+          titleColor: 'white',
+          message:
+            'Sorry, there are no images matching your search query. Please try again!',
+          messageColor: 'white',
+          color: 'red',
+          position: 'topCenter',
+          timeout: '5000',
+        });
+        return;
+      } else {
+        buttonMore.hidden = false;
+        photoGallery.insertAdjacentHTML('beforeend', makeGallery(data.data));
+        book.refresh();
+        page = page + 1;
+        if (page == pageLimit) {
+          iziToast.show({
+            titleColor: 'white',
+            message: `We're sorry, but you've reached the end of search results.!`,
+            messageColor: 'white',
+            color: 'blue',
+            position: 'topCenter',
+            timeout: '5000',
+          });
+          buttonMore.hidden = true;
+        }
+      }
+    })
+    .catch(error => {
+      iziToast.show({
+        title: 'Ops.',
+        titleColor: 'white',
+        message: error,
+        messageColor: 'white',
+        color: 'red',
+        position: 'topCenter',
+        timeout: '5000',
+      });
     })
     .finally(() => {
       loader.style.borderColor = 'white';
