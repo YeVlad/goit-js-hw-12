@@ -37,7 +37,7 @@ async function handleSearch(event) {
   loader.style.borderColor = 'black';
   loader.style.borderBottomColor = 'transparent';
   searchWord = event.currentTarget.elements.inputSearch.value;
-  page = 31;
+  page = 1;
 
   doFetch(searchWord, page)
     .then(data => {
