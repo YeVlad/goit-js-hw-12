@@ -1,5 +1,6 @@
 export function makeGallery(getedObject) {
   const neccesaryArray = getedObject.hits;
+
   return neccesaryArray
     .map(
       ({

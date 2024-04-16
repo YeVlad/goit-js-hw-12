@@ -54,8 +54,10 @@ async function handleSearch(event) {
         });
         return;
       } else {
-        buttonMore.hidden = false;
         photoGallery.insertAdjacentHTML('beforeend', makeGallery(data.data));
+        if (photoGallery.children.length) {
+          buttonMore.hidden = false;
+        }
         book.refresh();
         event.target.reset();
         page = page + 1;
@@ -98,8 +100,6 @@ async function searchMore(event) {
 
   doFetch(searchWord, page)
     .then(data => {
-      console.log(data.data);
-
       if (data.total == 0) {
         iziToast.show({
           title: 'Ops.',
@@ -113,8 +113,10 @@ async function searchMore(event) {
         });
         return;
       } else {
-        buttonMore.hidden = false;
         photoGallery.insertAdjacentHTML('beforeend', makeGallery(data.data));
+        if (photoGallery.children.length) {
+          buttonMore.hidden = false;
+        }
         book.refresh();
         page = page + 1;
         if (page > pageLimit) {
