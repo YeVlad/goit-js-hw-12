@@ -27,7 +27,7 @@ form.addEventListener('submit', handleSearch);
 buttonMore.addEventListener('click', searchMore);
 
 let page = 1;
-const pageLimit = 34;
+let pageLimit;
 let searchWord;
 
 async function handleSearch(event) {
@@ -37,7 +37,7 @@ async function handleSearch(event) {
   loader.style.borderColor = 'black';
   loader.style.borderBottomColor = 'transparent';
   searchWord = event.currentTarget.elements.inputSearch.value;
-  page = 1;
+  page = 31;
 
   doFetch(searchWord, page)
     .then(data => {
@@ -59,7 +59,9 @@ async function handleSearch(event) {
         book.refresh();
         event.target.reset();
         page = page + 1;
-        if (page == data.data.totalHits) {
+        pageLimit = Math.floor(data.data.totalHits / 15);
+
+        if (page == pageLimit) {
           iziToast.show({
             titleColor: 'white',
             message: `We're sorry, but you've reached the end of search results.!`,
@@ -115,7 +117,7 @@ async function searchMore(event) {
         photoGallery.insertAdjacentHTML('beforeend', makeGallery(data.data));
         book.refresh();
         page = page + 1;
-        if (page == pageLimit) {
+        if (page > pageLimit) {
           iziToast.show({
             titleColor: 'white',
             message: `We're sorry, but you've reached the end of search results.!`,
